@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>上传图像</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <link rel="shortcut icon" th:href="@{/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css(v=3.3.6)}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css(v=4.7.0)}" rel="stylesheet">
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css(v=4.1.0)}" rel="stylesheet">
+    <link th:href="@{/plugins/cropper/cropper.min.css}" rel="stylesheet">
+    <style type="text/css">
+        .img-upload-container,
+        .img-preview-container {
+            overflow: hidden;
+            text-align: center;
+            margin: 20px 0 10px 0;
+            width: 100%;
+            background-color: #999;
+            float:left
+        }
+        .img-upload-container {
+            min-height:400px;
+            max-height:400px;
+            width:534px;
+            display:table;
+        }
+        .img-upload-container div {
+            display:table-cell;
+            vertical-align: middle;
+        }
+        .img-upload-container img {
+            max-width: 100%; /* This rule is very important, please do not ignore this! */
+        }
+        .img-upload {
+            min-height:400px;
+            max-height:400px;
+            display:none
+        }
+        .img-preview-container {
+            margin-left: 30px;
+        }
+        .img-preview-container,
+        .img-preview {
+            height:80px;
+            width:80px;
+            overflow: hidden;
+            border-radius: 50%;
+            color: rgba(0,0,0,0);
+        }
+        .toolbars {
+            display: none;
+        }
+        .btn-cropper {
+            width: 534px
+        }
+    </style>
+</head>
+<body class="gray-bg" style="overflow: hidden">
+<div class="container">
+    <!--[if lt IE 9]>
+    <div class="alert alert-warning alert-dismissible fade show m-0 rounded-0" role="alert">
+        您正在使用<strong>过时的</strong>浏览器. 请至 <a href="http://browsehappy.com/"> 更新您的浏览器</a> 来提升体验.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <![endif]-->
+    <div class="upload-container">
+        <input type="file" class="sr-only" id="input" accept="image/*,camera" capture="camera" style="opacity: 0;">
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-sm-9">
+            <div class="img-upload-container">
+                <div>
+                    <button class="btn btn-primary" onclick="$('#input').click()">上传图片 <i class="fa fa-upload" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <img id="img-upload" class="img-upload">
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3">
+            <div class="img-preview-container">
+                <div class="img-preview"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row toolbars">
+        <div class="col-md-12 col-sm-12">
+            <div class="btn-group btn-cropper">
+                <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="放大">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-search-plus"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="缩小">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-search-minus"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="-10" data-second-option="0" title="左移">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-arrow-left"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="10" data-second-option="0" title="右移">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-arrow-right"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="-10" title="上移">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-arrow-up"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="10" title="下移">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-arrow-down"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="左旋转">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-rotate-left"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="右旋转">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-rotate-right"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1"  title="水平翻转">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-arrows-h"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="垂直翻转">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-arrows-v"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="reset" title="重置">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
+                        <span class="fa fa-refresh"></span>
+                    </span>
+                </button>
+            </div>
+            <div class="btn-group btn-submit">
+                <button type="button" class="btn btn-primary" id="btnUpload"><span class="fa fa-check"></span>确定</button>
+                <button type="button" class="btn btn-default" id="btnCancel"><span class="fa fa-remove"></span>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script th:src="@{/js/jquery-1.12.4.min.js(v=1.12.4)}"></script>
+<script th:src="@{/js/bootstrap.min.js(v=3.3.6)}"></script>
+<script th:src="@{/plugins/layer/layer.js(v=3.1.1)}"></script>
+
+<!-- cropper -->
+<script type="text/javascript" th:src="@{/plugins/cropper/cropper.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugins/cropper/jquery-cropper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/profile/head.js(t=${#dates.createNow().getTime()})}"></script>
+<!-- canvas-to-blob for IE -->
+<script type="text/javascript" th:src="@{/plugins/canvas-to-blob/canvas-to-blob.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var ctx = /*[[@{/}]]*/ '';
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.sys.dao.SysLogDao">
+
+
+	<select id="queryList" resultType="SysLogInfo">
+		select * from sys_log 
+		<where>
+			<if test="username != null and username.trim() != ''">
+				`username` like concat('%',#{username},'%')
+			</if>
+		</where>
+		order by id desc 
+	</select>
+	
+
+	<insert id="save" parameterType="SysLogInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log
+		(
+			`username`, 
+			`desc`,
+			`method`, 
+			`param`,
+			`runtime`,
+			`url`,
+			`ip`,
+			`create_time`
+		)
+		values
+		(
+			#{username},
+			#{desc},
+			#{method},
+			#{param},
+			#{runtime},
+			#{url},
+			#{ip},
+			#{createTime}
+		)
+	</insert>
+	 
+</mapper>

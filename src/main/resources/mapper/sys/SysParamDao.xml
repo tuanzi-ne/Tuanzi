@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.sys.dao.SysParamDao">
+	<!--查询-->
+	<select id="queryList" parameterType="map" resultType="SysParamInfo">
+		select * from sys_param
+        <where>
+            <if test="id != null">
+                and `id` = #{id}
+            </if>
+            <if test="paramKey != null and paramKey.trim() != ''">
+                and `param_key` like concat('%',#{paramKey},'%')
+            </if>
+        </where>
+	</select>
+
+	<!--查询所有参数-->
+	<select id="queryAllList" resultType="SysParamInfo">
+		select * from sys_param
+	</select>
+
+    <!--是否存在参数-->
+    <select id="isHasKey" parameterType="map" resultType="int">
+        select count(1)
+        from sys_param p
+        where p.`param_key` = #{paramKey}
+        <if test="paramId != null">
+            and p.`id` not in (#{paramId})
+        </if>
+    </select>
+
+    <!--保存新增-->
+	<insert id="save" parameterType="SysParamInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_param
+		(
+			    `param_key`,
+			    `param_value`,
+			    `param_desc`,
+			    `create_time`,
+			    `update_time`
+		)
+		values
+		(
+                #{paramKey},
+                #{paramValue},
+                #{paramDesc},
+                #{createTime},
+                #{updateTime}
+		)
+	</insert>
+
+	<!--更新-->
+	<update id="update" parameterType="SysParamInfo">
+		update sys_param
+		<set>
+                <if test="paramKey != null">`param_key`=#{paramKey},</if>
+                <if test="paramValue != null">`param_value`=#{paramValue},</if>
+                <if test="paramDesc != null">`param_desc`=#{paramDesc},</if>
+                <if test="createTime != null">`create_time`=#{createTime},</if>
+                <if test="updateTime != null">`update_time`=#{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!--批量删除-->
+	<delete id="delete">
+		delete from sys_param where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

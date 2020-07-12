@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<title>修改密码</title>
+<link rel="stylesheet" th:href="@{/plugins/hideshowpassword/css/public-inner-toggle-genericon.css}">
+<style type="text/css">
+    /**
+     * 修改颜色
+     */
+    .hideShowPassword-toggle:before {
+        color: #444;
+    }
+    .hideShowPassword-toggle:hover:before, .hideShowPassword-toggle:focus:before {
+        color: #111;
+    }
+</style>
+<head th:include="include :: header"></head>
+<body>
+<div style="margin:auto">
+    <div class="panel-body">
+        <form id="pwdForm">
+            <div class="form-group">
+                <label for="oldPwd" class="control-label">旧密码：</label>
+                <input id="oldPwd" name="oldPwd" class="form-control" type="password"
+                       autocomplete="new-password"
+                       maxlength="100"
+                       placeholder="旧密码">
+            </div>
+            <div class="form-group">
+                <label for="newPwd" class="control-label">新密码：</label>
+                <input id="newPwd" name="newPwd" class="form-control" type="password"
+                          maxlength="100"
+                          placeholder="新密码"/>
+            </div>
+            <div class="form-group">
+                <label for="confirmPwd" class="control-label">确认密码：</label>
+                <input id="confirmPwd" name="confirmPwd" class="form-control" type="password"
+                          autocomplete="new-password"
+                          maxlength="100"
+                          placeholder="确认密码"/>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/plugins/hideshowpassword/js/modernizr.js}"></script>
+<script th:src="@{/plugins/hideshowpassword/js/vendor/hideShowPassword.min.js}"></script>
+<script th:src="@{/js/sys/pwd.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

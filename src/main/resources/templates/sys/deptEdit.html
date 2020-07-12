@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<title>部门新增和修改</title>
+<head th:include="include :: header"></head>
+<style type="text/css">
+    .fa {
+        margin: 5px;
+        padding: 1px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 25px;
+        text-align: center;
+        transition: all 0.2s;
+    }
+
+    .fa:hover {
+        background-color: #5cb85c;
+        border-radius: 3px;
+        cursor: pointer;
+        transform: scale(1.3);
+    }
+
+    #iconLayer .active {
+        background-color: #5cb85c;
+        transform: scale(1.3);
+        border-radius: 3px;
+    }
+</style>
+<!DOCTYPE html>
+<body>
+<div style="margin:auto">
+    <div class="panel-body">
+        <form id="deptForm">
+            <input id="deptId" name="id" type="hidden" th:value="${dept?.id}">
+            <div class="form-group">
+                <label for="parentName" class="control-label">上级部门：</label>
+                <input id="parentId" name="parentId" type="hidden" th:value="${#strings.defaultString(dept?.parentId,0)}">
+                <input id="parentName" name="parentName" class="form-control" style="cursor:pointer"
+                       type="text" readonly
+                       placeholder="选择部门"
+                       th:value="${#strings.defaultString(dept?.parentName,'顶级部门')}"
+                       onclick="selectDept()">
+            </div>
+            <div class="form-group">
+                <label for="deptName" class="control-label">部门名称：</label>
+                <input id="deptName" name="deptName" class="form-control" type="text"
+                       autocomplete="new-password"
+                       maxlength="50"
+                       placeholder="部门名称"
+                       th:value="${dept?.deptName}">
+            </div>
+            <div class="form-group">
+                <label for="deptDesc" class="control-label">部门描述：</label>
+                <textarea id="deptDesc" name="deptDesc" class="form-control"
+                          rows="3"
+                          maxlength="200"
+                          placeholder="部门描述">[[${dept?.deptDesc}]]</textarea>
+            </div>
+            <div class="form-group">
+                <label for="orderNo" class="control-label">排序号：</label>
+                <input id="orderNo" name="orderNo" class="form-control" type="number"
+                       min="1" max="1000"
+                       placeholder="排序号"
+                       th:value="${#strings.defaultString(dept?.orderNo,1)}">
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+<!-- 部门选择 -->
+<div id="deptLayer" style="display: none">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+<div th:include="include :: footer"></div>
+<!--部门js-->
+<script th:src="@{/js/sys/deptEdit.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

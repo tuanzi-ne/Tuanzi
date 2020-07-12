@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<title>Job管理</title>
+<head th:include="include :: header"></head>
+<body>
+<div class="row" style="margin:auto">
+    <div class="panel-body">
+        <!-- 过滤条件 -->
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="jobFrm" class="form-horizontal">
+                    <div class="form-group" shiro:hasPermission="sys:job:list">
+                        <div class="col-md-3">
+                            <input style="display:none"/>
+                            <input type="text" class="form-control" id="beanName" name="beanName"
+                                   placeholder="Bean名称"
+                                   onkeydown="if(event.keyCode===13)query();">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" id="btnQuery" onclick="query()">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;查询
+                                </button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <!-- 状态  0：暂停   1：正常 -->
+                                    <input type="hidden" name="status" id="status"/>
+                                    <li><a href="javascript:" onclick="query(1)">查询正常Job</a></li>
+                                    <li><a href="javascript:" onclick="query(0)">查询暂停Job</a></li>
+                                </ul>
+                            </div>
+                            &nbsp;&nbsp;
+                            <button id="btnPause" shiro:hasPermission="sys:job:pause" type="button"
+                                    class="btn btn-danger" onclick="pause()">
+                                <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>&nbsp;暂停
+                            </button>
+                            &nbsp;&nbsp;
+                            <button id="btnResume" shiro:hasPermission="sys:job:resume" type="button"
+                                    class="btn btn-success" onclick="resume()">
+                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>&nbsp;恢复
+                            </button>
+                            &nbsp;&nbsp;
+                            <button id="btnRun" shiro:hasPermission="sys:job:run" type="button" class="btn btn-success"
+                                    onclick="run()">
+                                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>&nbsp;立即执行
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- bootstrap-table工具栏 -->
+        <div id="toolbar" class="btn-group">
+            <button id="btnAdd" shiro:hasPermission="sys:job:add" type="button" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;新增
+            </button>
+            <button id="btnEdit" shiro:hasPermission="sys:job:edit" type="button" class="btn btn-info">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;修改
+            </button>
+            <button id="btnDel" shiro:hasPermission="sys:job:delete" type="button" class="btn btn-danger">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;删除
+            </button>
+        </div>
+        <table id="bsTable"></table>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<!--Jobjs-->
+<script th:src="@{/js/job/job.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

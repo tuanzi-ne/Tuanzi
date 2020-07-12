@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<title>系统参数修改</title>
+<head th:include="include :: header"></head>
+<body>
+<div style="margin:auto">
+    <div class="panel-body">
+        <form id="paramForm">
+            <input id="paramId" name="id" type="hidden" th:value="${paramInfo?.id}">
+            <div class="form-group">
+                <label for="paramKey" class="control-label">参数键名：</label>
+                <input id="paramKey" name="paramKey" class="form-control" type="text"
+                       placeholder="参数键名"
+                       th:value="${paramInfo?.paramKey}">
+            </div>
+            <div class="form-group">
+                <label for="paramValue" class="control-label">参数键值：</label>
+                <input id="paramValue" name="paramValue" class="form-control" type="text"
+                       placeholder="参数键值"
+                       th:value="${paramInfo?.paramValue}">
+            </div>
+            <div class="form-group">
+                <label for="paramDesc" class="control-label">参数描述：</label>
+                <textarea id="paramDesc" name="paramDesc" class="form-control" type="text"
+                       placeholder="参数描述">[[${paramInfo?.paramDesc}]]</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/js/sys/paramEdit.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<title>用户新增和修改</title>
+<head th:include="include :: header"></head>
+<body>
+<div style="margin:auto">
+    <div class="panel-body">
+        <form id="userForm">
+            <input id="userId" name="id" type="hidden" th:value="${user?.id}">
+            <div class="form-group">
+                <label for="username" class="control-label">用户名：</label>
+                <input id="username" name="username" class="form-control" type="text"
+                       autocomplete="new-password"
+                       maxlength="50"
+                       placeholder="用户名"
+                       th:value="${user?.username}">
+            </div>
+            <div class="form-group" th:if="${#strings.isEmpty(user?.id)}">
+                <label for="password" class="control-label">密码：</label>
+                <input id="password" name="password" class="form-control" type="password"
+                       autocomplete="new-password"
+                       maxlength="50"
+                       placeholder="密码"
+                >
+            </div>
+            <div class="form-group" th:if="${#strings.isEmpty(user?.id)}">
+                <label for="confirm_password" class="control-label">确认密码：</label>
+                <input id="confirm_password" name="confirm_password" class="form-control" type="password"
+                       autocomplete="new-password"
+                       maxlength="50"
+                       placeholder="确认密码">
+            </div>
+            <div class="form-group">
+                <label for="realname" class="control-label">姓名：</label>
+                <input id="realname" name="realname" class="form-control" type="text"
+                       maxlength="50"
+                       placeholder="姓名"
+                       th:value="${user?.realname}">
+            </div>
+            <div class="form-group">
+                <label class="control-label">部门：</label>
+                <input id="deptId" name="deptId" class="hidden" th:value="${user?.deptId}">
+                <input id="deptName" name="deptName" class="form-control" style="cursor: pointer;" type="text"
+                       readonly="readonly"
+                       placeholder="所属部门"
+                       th:value="${user?.deptName}"
+                       onclick="selectDept()">
+            </div>
+            <div class="form-group">
+                <label for="phone" class="control-label">手机：</label>
+                <input id="phone" name="phone" class="form-control" type="text"
+                       maxlength="11"
+                       placeholder="手机"
+                       th:value="${user?.phone}">
+            </div>
+            <div class="form-group">
+                <label for="email" class="control-label">邮箱：</label>
+                <input id="email" name="email" class="form-control" type="email"
+                       maxlength="50"
+                       placeholder="邮箱"
+                       th:value="${user?.email}">
+            </div>
+            <div class="form-group">
+                <label class="control-label">状态:</label>
+                <label class="radio-inline i-checks">
+                    <input type="radio" name="status" value="1"
+                           th:checked="${#strings.isEmpty(user?.status) || user?.status == 1} ? true : false"
+                    /> 正常
+                </label>
+                <label class="radio-inline i-checks">
+                    <input type="radio" name="status" value="0"
+                           th:checked="${!#strings.isEmpty(user?.status) && user.status == 0} ? true : false"
+                    /> 禁用
+                </label>
+            </div>
+            <input type="hidden" name="roleIds" id="roleIds">
+            <div class="form-group">
+                <label class="control-label">角色:</label>
+                <label class="checkbox-inline i-checks" th:each="role:${roles}">
+                    <input type="checkbox" name="role" th:value="${role.id}"
+                           th:checked="${!#lists.isEmpty(user?.roleIds) && #lists.contains(user?.roleIds, role?.id)} ? true : false"
+                           th:text="' '+${role.roleName}"/>
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+<!-- 部门选择 -->
+<div id="deptLayer" style="display: none">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+<div th:include="include :: footer"></div>
+<!--用户js-->
+<script th:src="@{/js/sys/userEdit.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

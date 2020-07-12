@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<title>系统日志</title>
+<head th:include="include :: header"></head>
+<body>
+<div class="row" style="margin:auto">
+    <div class="panel-body">
+        <!-- 过滤条件 -->
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="userFrm" class="form-horizontal">
+                    <div class="form-group" shiro:hasPermission="sys:log:list">
+                        <div class="col-md-3">
+                            <input style="display:none"/>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   placeholder="用户名"
+                                   onkeydown="if(event.keyCode===13)query();">
+                        </div>
+                        <div class="btn-group">
+                            <button  type="button" class="btn btn-primary"
+                                    id="btnQuery" onclick="query()">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;查询
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table id="bsTable"></table>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<!--用户js-->
+<script th:src="@{/js/sys/log.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

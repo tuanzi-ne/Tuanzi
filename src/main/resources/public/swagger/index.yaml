@@ -1,0 +1,979 @@
+swagger: '2.0'
+info:
+  description: JAVA后台管理系统，企业开发首选脚手架。
+  version: 1.0.0
+  title: SpringBootAdmin
+
+basePath: /SpringBootAdmin
+
+schemes:
+  - http
+
+#定义接口数据
+paths:
+  /captcha:
+    get:
+      tags:
+        - 用户登录
+      summary: 获取验证码
+      produces:
+        - application/octet-stream
+  /login:
+    post:
+      tags:
+        - 用户登录
+      summary: 用户登录
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          description: 用户名
+          in: query
+          type: string
+          required: true
+        - name: password
+          description: 密码
+          in: query
+          type: string
+          required: true
+        - name: captcha
+          description: 验证码
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          schema:
+            type: object
+            properties:
+              code:
+                description: 状态码 1：成功  0：失败
+                type: integer
+                format: int32
+              token:
+                description: token
+                type: string
+              expire:
+                description: 过期时长
+                type: integer
+                format: int32
+              msg:
+                description: 失败原因
+                type: string
+
+  /sys/user/list:
+    get:
+      tags:
+        - 用户管理
+      summary: 查询用户列表
+      produces:
+        - application/json
+      parameters:
+        - name: pageSize
+          description: 分页条数
+          in: query
+          type: integer
+          required: true
+        - name: pageNumber
+          description: 分页页码
+          in: query
+          type: integer
+          required: true
+        - name: sortName
+          description: 排序字段
+          in: query
+          type: string
+          required: true
+        - name: sortOrder
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+          required: true
+        - name: username
+          description: 用户名
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 返回用户列表
+          schema:
+            $ref: '#/definitions/SysUserInfo'
+  /sys/user/save:
+    post:
+      tags:
+        - 用户管理
+      summary: 新增用户
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 用户对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysUserInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/user/update:
+    post:
+      tags:
+        - 用户管理
+      summary: 修改用户
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 用户对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysUserInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/user/delete:
+    post:
+      tags:
+        - 用户管理
+      summary: 删除用户
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 用户ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/user/updatePwd:
+      post:
+        tags:
+          - 用户管理
+        summary: 修改密码
+        produces:
+          - application/json
+        parameters:
+          - name: oldPwd
+            description: 原密码
+            in: query
+            type: string
+            required: true
+          - name: newPwd
+            description: 新密码
+            in: query
+            type: string
+            required: true
+        responses:
+          '200':
+            schema:
+              $ref: '#/definitions/Result'
+
+  /sys/dept/list:
+    get:
+      tags:
+        - 部门管理
+      summary: 查询部门列表
+      produces:
+        - application/json
+      parameters:
+        - name: sortName
+          description: 排序字段
+          in: query
+          type: string
+          required: true
+        - name: sortOrder
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          description: 部门列表
+          schema:
+            $ref: '#/definitions/SysDeptInfo'
+  /sys/dept/tree:
+    post:
+      tags:
+        - 部门管理
+      summary: 选择部门
+      description: 添加、修改部门的时候，选择上级部门接口
+      produces:
+        - application/json
+      parameters:
+        - name: depId
+          description: 部门ID
+          in: body
+          type: string
+      responses:
+        '200':
+          description: 部门列表
+          schema:
+            $ref: '#/definitions/SysDeptInfo'
+  /sys/dept/save:
+    post:
+      tags:
+        - 部门管理
+      summary: 新增部门
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 部门对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysDeptInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/dept/update:
+    post:
+      tags:
+        - 部门管理
+      summary: 修改部门
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 部门对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysDeptInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/dept/delete:
+    post:
+      tags:
+        - 部门管理
+      summary: 删除部门
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 部门ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+
+  /sys/role/list:
+    get:
+      tags:
+        - 角色管理
+      summary: 查询角色列表
+      produces:
+        - application/json
+      parameters:
+        - name: pageSize
+          description: 分页条数
+          in: query
+          type: integer
+          required: true
+        - name: pageNumber
+          description: 分页页码
+          in: query
+          type: integer
+          required: true
+        - name: sortName
+          description: 排序字段
+          in: query
+          type: string
+          required: true
+        - name: sortOrder
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+          required: true
+        - name: roleName
+          description: 角色名
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 角色列表
+          schema:
+            $ref: '#/definitions/SysRoleInfo'
+  /sys/role/tree:
+    get:
+      tags:
+        - 角色管理
+      summary: 当前角色资源列表
+      description: 查询所有角色列表
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 返回用户列表
+          schema:
+            $ref: '#/definitions/SysRoleInfo'
+  /sys/role/save:
+    post:
+      tags:
+        - 角色管理
+      summary: 新增角色
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 角色对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysRoleInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/role/update:
+    post:
+      tags:
+        - 角色管理
+      summary: 修改角色
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 角色对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysRoleInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/role/delete:
+    post:
+      tags:
+        - 角色管理
+      summary: 删除角色
+      produces:
+        - application/json
+      parameters:
+        - name: list
+          description: 角色ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+
+  /sys/res/list:
+    get:
+      tags:
+        - 资源管理
+      summary: 查询资源列表
+      produces:
+        - application/json
+      parameters:
+        - name: sortName
+          description: 排序字段
+          in: query
+          type: string
+          required: true
+        - name: sortOrder
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+          required: true
+      responses:
+        '200':
+          description: 返回资源列表
+          schema:
+            $ref: '#/definitions/SysResInfo'
+  /sys/res/tree:
+    get:
+      tags:
+        - 资源管理
+      summary: 选择资源
+      description: 添加、修改资源的时候，选择上级资源接口
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 返回资源列表
+          schema:
+            $ref: '#/definitions/SysResInfo'
+  /sys/res/save:
+    post:
+      tags:
+        - 资源管理
+      summary: 添加资源
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 资源对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysResInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/res/update:
+    post:
+      tags:
+        - 资源管理
+      summary: 修改资源
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 资源对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysResInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/res/delete:
+    post:
+      tags:
+        - 资源管理
+      summary: 删除资源
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 资源ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+
+  /sys/log/list:
+    get:
+      tags:
+        - 系统日志
+      summary: 查询日志列表
+      produces:
+        - application/json
+      parameters:
+        - name: pageSize
+          description: 分页条数
+          in: query
+          type: integer
+          required: true
+        - name: pageNumber
+          description: 分页页码
+          in: query
+          type: integer
+          required: true
+        - name: sortName
+          description: 排序字段
+          in: query
+          type: string
+          required: true
+        - name: sortOrder
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+          required: true
+        - name: username
+          description: 用户名
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 日志列表
+          schema:
+            $ref: '#/definitions/SysLogInfo'
+  /sys/exp/list:
+      get:
+        tags:
+          - 系统异常
+        summary: 查询异常列表
+        produces:
+          - application/json
+        parameters:
+          - name: pageSize
+            description: 分页条数
+            in: query
+            type: integer
+            required: true
+          - name: pageNumber
+            description: 分页页码
+            in: query
+            type: integer
+            required: true
+          - name: sortName
+            description: 排序字段
+            in: query
+            type: string
+            required: true
+          - name: sortOrder
+            description: 排序方式，如：asc、desc
+            in: query
+            type: string
+            required: true
+          - name: username
+            description: 用户名
+            in: query
+            type: string
+        responses:
+          '200':
+            description: 日志列表
+            schema:
+              $ref: '#/definitions/SysExpInfo'
+
+  /sys/job/list:
+    get:
+      tags:
+        - 定时任务
+      summary: 定时任务列表
+      produces:
+        - application/json
+      parameters:
+        - name: pageSize
+          description: 分页条数
+          in: query
+          type: integer
+          required: true
+        - name: pageNumber
+          description: 分页页码
+          in: query
+          type: integer
+          required: true
+        - name: sortName
+          description: 排序字段
+          in: query
+          type: string
+          required: true
+        - name: sortOrder
+          description: 排序方式，如：asc、desc
+          in: query
+          type: string
+          required: true
+        - name: beanName
+          description: bean名称
+          in: query
+          type: string
+        - name: status
+          description: 状态
+          in: query
+          type: string
+      responses:
+        '200':
+          description: 定时任务列表
+          schema:
+            $ref: '#/definitions/SysJobInfo'
+  /sys/job/save:
+    post:
+      tags:
+        - 定时任务
+      summary: 新增定时任务
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 定时任务对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysJobInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/job/update:
+    post:
+      tags:
+        - 定时任务
+      summary: 修改定时任务
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 定时任务对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/SysJobInfo'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/job/delete:
+    post:
+      tags:
+        - 定时任务
+      summary: 删除定时任务
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 定时任务ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/job/run:
+    post:
+      tags:
+        - 定时任务
+      summary: 立即执行任务
+      produces:
+        - application/json
+      parameters:
+        - name: ids
+          description: 定时任务ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/job/pause:
+    post:
+      tags:
+        - 定时任务
+      summary: 暂停定时任务
+      produces:
+        - application/json
+      parameters:
+        - name: ids
+          description: 定时任务ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+  /sys/job/resume:
+    post:
+      tags:
+        - 定时任务
+      summary: 恢复定时任务
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 定时任务ID列表
+          in: body
+          type: array
+          items:
+            type: integer
+            format: int64
+            default: 0
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Result'
+
+#定义数据模型
+definitions:
+  Result:
+      type: object
+      properties:
+        code:
+          description: 状态码 1：成功  0：失败
+          type: integer
+          format: int32
+        msg:
+          description: 失败原因
+          type: string
+  SysUserInfo:
+    type: object
+    properties:
+      id:
+        description: 用户ID
+        type: integer
+        format: int64
+      username:
+        description: 用户名
+        type: string
+      realname:
+        description: 用户姓名
+        type: string
+      deptId:
+        description: 部门ID
+        type: integer
+        format: int64
+      deptName:
+        description: 部门名称
+        type: string
+      password:
+        description: 密码
+        type: string
+      salt:
+        description: 加盐
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      phone:
+        description: 手机号
+        type: string
+      status:
+        description: 状态  0：禁用   1：正常
+        type: integer
+        format: int32
+      roleIds:
+        description: 角色ID列表
+        type: array
+        items:
+          type: integer
+          format: int64
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
+      updateTime:
+              description: 更新时间
+              type: string
+              format: date-time
+  SysDeptInfo:
+    type: object
+    properties:
+      id:
+        description: 部门ID
+        type: integer
+        format: int64
+      deptName:
+        description: 部门名称
+        type: string
+      deptDesc:
+        description: 部门描述
+        type: string
+      parentId:
+        description: 上级部门ID，一级部门为0
+        type: integer
+        format: int64
+      parentName:
+        description: 上级部门名称
+        type: string
+      orderNo:
+        description: 排序
+        type: integer
+        format: int32
+      open:
+        description: 是否展开   true：展开   false：不展开
+        type: boolean
+        format: int32
+  SysRoleInfo:
+    type: object
+    properties:
+      id:
+        description: 角色ID
+        type: integer
+        format: int64
+      roleName:
+        description: 角色名称
+        type: string
+      roleDesc:
+        description: 角色描述
+        type: string
+      list:
+        description: 资源ID列表
+        type: array
+        items:
+          type: integer
+          format: int64
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
+      updateTime:
+        description: 更新时间
+        type: string
+        format: date-time
+  SysResInfo:
+    type: object
+    properties:
+      id:
+        description: 资源ID
+        type: integer
+        format: int64
+      resName:
+        description: 资源名称
+        type: string
+      resDesc:
+        description: 资源描述
+        type: string
+      parentId:
+        description: 父资源ID，一级资源为0
+        type: integer
+        format: int64
+      parentName:
+        description: 父资源名称
+        type: string
+      resUrl:
+        description: 资源URL
+        type: string
+      resPerms:
+        description: 资源权限标识
+        type: string
+      resType:
+        description: 资源类型     0：目录   1：资源   2：按钮
+        type: integer
+        format: int32
+      resIcon:
+        description: 资源图标
+        type: string
+      orderNo:
+        description: 排序
+        type: integer
+        format: int32
+      open:
+        description: 是否展开   true：展开   false：不展开
+        type: boolean
+        format: int32
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
+      updateTime:
+        description: 更新时间
+        type: string
+        format: date-time
+  SysLogInfo:
+    type: object
+    properties:
+      id:
+        description: 日志ID
+        type: integer
+        format: int64
+      username:
+        description: 用户名
+        type: string
+      desc:
+        description: 日志描述
+        type: string
+      ip:
+        description: 请求IP
+        type: string
+      method:
+        description: 请求方法
+        type: string
+      url:
+        description: 请求Url
+        type: string
+      param:
+        description: 请求参数
+        type: string
+      time:
+        description: 执行时长(毫秒)
+        type: integer
+        format: int64
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
+  SysExpInfo:
+    type: object
+    properties:
+      id:
+        description: 异常ID
+        type: integer
+        format: int64
+      username:
+        description: 用户名
+        type: string
+      expection:
+        description: 异常信息
+        type: string
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
+  SysJobInfo:
+    type: object
+    properties:
+      id:
+        description: 任务ID
+        type: integer
+        format: int64
+      beanName:
+        description: spring bean名称
+        type: string
+      methodName:
+        description: 方法名
+        type: string
+      params:
+        description: 参数
+        type: string
+      cronExpression:
+        description: cron表达式
+        type: string
+      status:
+        description: 任务状态  0：正常  1：暂停
+        type: integer
+        format: int32
+      remark:
+        description: 备注
+        type: string
+      createTime:
+        description: 创建时间
+        type: string
+        format: date-time
+      updateTime:
+        description: 更新时间
+        type: string
+        format: date-time
+

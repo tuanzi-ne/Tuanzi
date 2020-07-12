@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <title>后台管理登录</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css(v=3.3.6)}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css(v=4.7.0)}" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
+</head>
+<body style="overflow:hidden;">
+<!-- nav -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="Brand" th:src="@{/img/brand.png}">&nbsp;&nbsp;
+                <span class="navbar-head">SpringBootAdmin管理平台</span>
+            </a>
+        </div>
+    </div>
+</nav>
+<!-- main -->
+<div class="container signin">
+    <!-- left -->
+    <div class="col-md-7">
+        <div class="row"><h1>SpringBootAdmin</h1></div>
+        <div class="row"><h3>欢迎使用SpringBootAdmin后台管理系统</h3></div>
+        <div class="row">
+            <ul>
+                <li><i class="fa fa-check"></i> springboot</li>
+                <li><i class="fa fa-check"></i> mybatis</li>
+                <li><i class="fa fa-check"></i> shiro</li>
+                <li><i class="fa fa-check"></i> Thymeleaf</li>
+                <li><i class="fa fa-check"></i> bootstrap3</li>
+            </ul>
+        </div>
+    </div>
+    <!-- right -->
+    <div class="col-md-5">
+        <form class="form-signin" id="form-signin" method="post" action="">
+            <div id="msg" class="form-group"></div>
+            <h4 class="text-center">登录</h4>
+            <div class="form-group has-feedback">
+                <label class="control-label" for="username">账号:</label>
+                <input type="text" name="username" id="username"
+                       class="form-control"
+                       placeholder="账号"
+                       autocomplete="new-password" maxlength="50">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <label class="control-label" for="password">密码：</label>
+                <input type="text" name="password" id="password"
+                       class="form-control"
+                       placeholder="密码"
+                       autocomplete="new-password"
+                       onfocus="this.type='password'"
+                       maxlength="100">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="form-inline">
+                <input type="text" name="captcha" id="captcha"
+                       class="form-control"
+                       placeholder="输入验证码" maxlength="4" onkeydown="onKeyDown()">
+                <img th:src="@{/captcha(t=${#dates.createNow()})}" alt="验证码图片" class="kaptcha" id="kaptcha"
+                     onclick="changeCaptcha()" title="看不清换一张?">
+            </div>
+            <div class="form-submit">
+                <input type="submit" id="btnLogin"
+                       class="btn btn-success btn-block"
+                       autocomplete="off"
+                       data-loading-text="正在登录..."
+                       value="登录">
+            </div>
+        </form>
+    </div>
+</div>
+<!-- footer -->
+<footer>
+    <div class="text-center">
+        SpringBootAdmin管理平台 &copy;[[${#dates.year(#dates.createNow())}]]
+    </div>
+</footer>
+<!--全局js-->
+<script th:src="@{/js/jquery-1.12.4.min.js(v=1.12.4)}"></script>
+<script th:src="@{/js/bootstrap.min.js(v=3.3.6)}"></script>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js?v=3.7.3"></script>
+<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js?v=1.4.2"></script>
+<![endif]-->
+
+<!--第三方插件-->
+<script th:src="@{/plugins/validate/jquery.validate.min.js}"></script>
+<script th:src="@{/plugins/validate/messages_zh.min.js}"></script>
+
+<!--自定义js-->
+<script th:src="@{/js/login.js}"></script>
+<script th:src="@{/js/jquery.extend.js}"></script>
+
+</body>
+</html>

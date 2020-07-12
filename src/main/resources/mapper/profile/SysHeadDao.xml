@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.profile.dao.SysHeadDao">
+    <!--查询头像信息-->
+    <select id="queryHeadInfoById" parameterType="Integer" resultType="SysHeadInfo">
+        select h.*
+        from sys_head h
+        <where>
+            <if test="userId != null">
+                and h.`user_id` = #{userId}
+            </if>
+        </where>
+    </select>
+
+
+    <!--新增头像-->
+    <insert id="save" parameterType="SysHeadInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_head
+        (
+        `id`,
+        `user_id`,
+        `src_img_name`,
+        `head_img_name`,
+        `create_time`,
+        `update_time`
+        )
+        values
+        (
+        #{id},
+        #{userId},
+        #{srcImgName},
+        #{headImgName},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <!--删除头像-->
+    <delete id="delete">
+        delete from sys_head where user_id = #{userId}
+    </delete>
+</mapper>

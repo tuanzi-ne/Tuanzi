@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.job.dao.SysJobDao">
+
+	<select id="queryList" resultType="SysJobInfo" >
+		select * from schedule_job
+		<where>
+			<if test="beanName != null and beanName.trim() != ''">
+				bean_name like concat('%', #{beanName}, '%') 
+			</if>
+			<if test="status != null and status.trim() != ''">
+                status = #{status}
+			</if>
+			<if test="jobId != null">
+				and `id` = #{jobId}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="save" parameterType="SysJobInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into schedule_job
+		(
+			`bean_name`, 
+			`method_name`, 
+			`params`, 
+			`cron_expression`, 
+			`status`, 
+			`remark`, 
+			`create_time`,
+			`update_time`
+		)
+		values
+		(
+			#{beanName}, 
+			#{methodName}, 
+			#{params}, 
+			#{cronExpression}, 
+			#{status}, 
+			#{remark}, 
+			#{createTime},
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="SysJobInfo">
+		update schedule_job 
+		<set> 
+			<if test="beanName != null">`bean_name` = #{beanName}, </if>
+			<if test="methodName != null">`method_name` = #{methodName}, </if>
+			<if test="params != null">`params` = #{params}, </if>
+			<if test="cronExpression != null">`cron_expression` = #{cronExpression}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!-- 批量更新状态 -->
+	<update id="updateBatch"> 
+		update schedule_job set status = #{status} where id in
+		<foreach item="jobId" collection="list"  open="(" separator="," close=")">
+			#{jobId}
+		</foreach>
+	</update>
+	
+	<delete id="delete">
+		delete from schedule_job where id in
+		<foreach item="jobId" collection="array" open="(" separator="," close=")">
+			#{jobId}
+		</foreach>
+	</delete>
+</mapper>

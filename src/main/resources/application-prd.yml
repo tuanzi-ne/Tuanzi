@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://XXX:3306/springboot?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+    username: XXX
+    password: XXX
+    druid:
+      initial-size: 5 # 初始化时创建连接的初始数量,初始化发生在显示调用init方法,或者第一次getConnection时
+      max-active: 10 # 连接池最大连接数量
+      min-idle: 2 # 连接池最小连接数量,当经过一个高峰时间后,连接池会将释放掉不用的连接,一直减少到minxIdle为止
+      max-wait: 60000  # 获取连接时最大等待时间,单位毫秒
+      time-between-eviction-runs-millis: 60000 # 1) Destroy线程会检测连接的间隔时间 2) testWhileIdle的判断依据,单位毫秒
+      min-evictable-idle-time-millis: 30000 # 连接在池中最小生存时间,单位毫秒
+      validation-query: select 1 # 检测连接是否有效sql
+      test-while-idle: true # 申请连接时检测,如果空闲时间>timeBetweenEvictionRunsMillis,执行validationQuery检测连接是否有效
+      test-on-borrow: true # 申请连接时执行validationQuery检测连接是否有效,此配置会降低性能
+      test-on-return: false # 归还连接时执行validationQuery检测连接是否有效,此配置会降低性能
+      pool-prepared-statements: true # 打开PSCache,并且指定每个连接上PSCache的大小
+      max-pool-prepared-statement-per-connection-size: 20
+      filter: # 配置监控统计拦截的filter
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 300 #过滤慢查询语句,单位毫秒
+          merge-sql: true
+        wall: # 允许SQL批量处理
+          db-type: mysql
+          config:
+            multi-statement-allow: true
+        slf4j: # SQL日志输出监控
+          result-set-log-enabled: false
+          data-source-log-enabled: false
+          connection-log-enabled: false
+          statement-executable-sql-log-enable: true # 显示执行语句
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: druid
+        login-password: druid
+        reset-enable: true
+      web-stat-filter: # 单个url调用sql列表
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.swf,*.css,*.ico,/druid/*,/logout.html'
+        profile-enable: true
+        principal-cookie-name: sid
+      aop-patterns:
+        com.spring.*.controller.*,com.spring.*.service.*
+session:
+  redis:
+    host: XXX
+    port: XXX
+    password:
+    database: 11
+    timeout: 10000 # 连接超时时间,单位毫秒
+    minIdle: 5 # 连接池中最小空闲连接数
+    maxIdle: 10 # 连接池中最大空闲连接数
+    maxTotal: 100 # 连接池最大连接数（使用负值表示没有限制）
+    maxWaitMillis: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制）,单位毫秒
+    testOnBorrow: true

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<title>代码生成器</title>
+<head th:include="include :: header"></head>
+<body>
+<div class="row" style="margin:auto">
+    <div class="panel-body">
+        <!-- 过滤条件 -->
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="userFrm" class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input style="display:none"/>
+                            <input type="text" class="form-control" id="tableName" name="tableName"
+                                   placeholder="表名"
+                                   onkeydown="if(event.keyCode===13)query();">
+                        </div>
+                        <div class="col-md-4">
+                            <button id="btnQuery" shiro:hasPermission="sys:gen:list" type="button"
+                                    class="btn btn-primary" onclick="query()">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;查询
+                            </button>
+                            &nbsp;&nbsp;
+                            <button id="btnGen" shiro:hasPermission="sys:gen:code" type="button" class="btn btn-success"
+                                    onclick="genCode()">
+                                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&nbsp;生成代码
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table id="bsTable"></table>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/js/gen/gen.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

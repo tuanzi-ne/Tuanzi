@@ -1,0 +1,48 @@
+server: # tomcat
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    mode: LEGACYHTML5
+    suffix: .html
+    encoding: UTF-8
+    cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30Mb
+      max-request-size: 50Mb
+  devtools: # 修改后是否重启
+    restart:
+      enabled: true
+mybatis: # mybatis
+  configuration:
+    cache-enabled: true
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: com.spring.sys.pojo,com.spring.job.pojo,com.spring.gen.pojo,com.spring.profile.pojo
+pagehelper: # 分页插件
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+user:
+  reset:
+    pwd: abcd1234
+shiro: #ehcache:0,redis:1
+  cache:
+    type: 0
+upload:
+  img:
+    path: /Users/tuanzi/My/work/dev/project/Study/SpringBootAdmin/images/upload/imgs
+    static:
+      url: /sys/head/img/**

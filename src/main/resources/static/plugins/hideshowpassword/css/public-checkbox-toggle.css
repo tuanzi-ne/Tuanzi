@@ -1,0 +1,16 @@
+label.hideShowPassword-checkbox {
+	display: block;
+	font-size: 12px;
+	margin-bottom: 16px;
+}
+
+@media screen and (min-width: 768px) {
+	label.hideShowPassword-checkbox {
+		margin-bottom: 12px;
+	}
+}
+
+::-ms-reveal,
+::-ms-clear {
+	display: none !important;
+}

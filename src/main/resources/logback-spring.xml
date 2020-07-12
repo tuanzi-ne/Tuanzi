@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--日志存放路径,勿使用相对路径-->
+    <property name="app.log.home" value="logs"/>
+    <!--APP名称-->
+    <property name="app.name" value="Tuanzi"/>
+    <!--日志级别-->
+    <property name="log.level" value="INFO"/>
+
+    <!-- console输出,采用SpringBoot默认配置 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- 每天INFO日志 -->
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--当前文件名称-->
+        <file>${app.log.home}/${app.name}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${app.log.home}/${app.name}/info.log.%d{yyyy-MM-dd}.%i.gz</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+            <!--日志文件最大字节-->
+            <MaxFileSize>10MB</MaxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--%d:日期,%-5p:5个字符宽度日志信息级别,PID:进程号,%t:线程名,logger:日志所属类，%m:具体日志消息,%n:换行符,%xEx:异常-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n%xEx</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 每天ERROR日志 -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--当前文件名称-->
+        <file>${app.log.home}/${app.name}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${app.log.home}/${app.name}/error.log.%d{yyyy-MM-dd}.%i.gz</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+            <!--日志文件最大字节-->
+            <MaxFileSize>10MB</MaxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--%d:日期,%-5p:5个字符宽度日志信息级别,PID:进程号,%t:线程名,logger:日志所属类，%m:具体日志消息,%n:换行符,%xEx:异常-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n%xEx</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+    <!--SLOWSQL-->
+    <appender name="SLOWSQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${app.log.home}/${app.name}/slow_sql.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${app.log.home}/${app.name}/slow_sql.log.%i.gz</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>3</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <!--日志文件最大字节-->
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n%xEx</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+    <!--druid-->
+    <appender name="DRUID" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${app.log.home}/${app.name}/druid.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${app.log.home}/${app.name}/druid.log.%i.gz</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>3</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <!--日志文件最大字节-->
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n%xEx</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!-- 日志输出级别 -->
+    <!-- root:logger根节点,唯一,默认名称root,level:日志级别,appender-ref:appender引用-->
+    <root level="${log.level}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+    <!--mybatis log configure-->
+    <!-- logger:日志单位,name:当前扫描包,level:日志级别-->
+    <logger name="com.apache.ibatis" level="${log.level}"/>
+    <logger name="java.sql.Connection" level="${log.level}"/>
+    <logger name="java.sql.Statement" level="${log.level}"/>
+    <logger name="java.sql.PreparedStatement" level="${log.level}"/>
+    <!--druid-->
+    <logger name="com.alibaba.druid.filter.stat.StatFilter" level="${log.level}">
+        <appender-ref ref="SLOWSQL"/>
+    </logger>
+    <logger name="druid.sql" level="${log.level}">
+        <appender-ref ref="DRUID"/>
+    </logger>
+</configuration>

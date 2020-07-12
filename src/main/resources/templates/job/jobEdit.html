@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<title>Job新增和修改</title>
+<head th:include="include :: header"></head>
+<body>
+<div style="margin:auto">
+    <div class="panel-body">
+        <form id="jobForm">
+            <input id="jobId" name="id" type="hidden" th:value="${job?.id}">
+            <div class="form-group">
+                <label for="beanName" class="control-label">bean名称：</label>
+                <input id="beanName" name="beanName" class="form-control" type="text"
+                       maxlength="200"
+                       placeholder="bean名称"
+                       th:value="${#strings.defaultString(job?.beanName,'')}">
+            </div>
+            <div class="form-group">
+                <label for="methodName" class="control-label">方法名：</label>
+                <input id="methodName" name="methodName" class="form-control" type="text"
+                       maxlength="200"
+                       placeholder="方法名"
+                       th:value="${#strings.defaultString(job?.methodName,'')}">
+            </div>
+            <div class="form-group">
+                <label for="params" class="control-label">参数：</label>
+                <input id="params" name="params" class="form-control" type="text"
+                       maxlength="1000"
+                       placeholder="参数"
+                       th:value="${#strings.defaultString(job?.params,'')}">
+            </div>
+            <div class="form-group">
+                <label for="cronExpression" class="control-label">cron表达式：</label>
+                <input id="cronExpression" name="cronExpression" class="form-control" type="text"
+                       maxlength="100"
+                       placeholder="cron表达式"
+                       th:value="${#strings.defaultString(job?.cronExpression,'')}">
+            </div>
+            <div class="form-group">
+                <label class="control-label">状态:</label>
+                <label class="radio-inline i-checks">
+                    <input type="radio" name="status" value="1"
+                           th:checked="${#strings.isEmpty(job?.status) || job?.status == 1} ? true : false"
+                    /> 正常
+                </label>
+                <label class="radio-inline i-checks">
+                    <input type="radio" name="status" value="0"
+                           th:checked="${!#strings.isEmpty(job?.status) && job.status == 0} ? true : false"
+                    /> 禁用
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="remark" class="control-label">备注：</label>
+                <textarea id="remark" name="remark" class="form-control" type="text"
+                       row = "3"
+                       maxlength="500"
+                       placeholder="备注">[[${#strings.defaultString(job?.remark,'')}]]</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<!--Jobjs-->
+<script th:src="@{/js/job/jobEdit.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

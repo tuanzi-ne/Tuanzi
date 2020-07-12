@@ -1,0 +1,113 @@
+HELP.md
+*.sw?
+.#*
+*#
+*~ 
+/code
+.svntemp
+.metadata
+.factorypath
+.recommenders
+bin
+lib/
+target
+.factorypath
+interpolated*.xml
+dependency-reduced-pom.xml
+build.log
+_site/
+.*.md.html
+manifest.yml
+MANIFEST.MF
+settings.xml
+activemq-data
+overridedb.*
+*.jar
+.DS_Store
+.svn
+*.svntmp
+dump.rdb
+transaction-logs
+!**/src/main/**
+!**/src/test/**
+
+### Gradle ###
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+#
+# Project specific excludes
+#
+
+tomcat
+
+#
+# Default excludes
+#
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+
+# Maven 
+target/
+
+# IntelliJ project files 
+*.iml
+*.iws
+*.ipr
+.idea/
+
+# eclipse project file
+.settings/
+.classpath
+.project
+
+### NetBeans ###
+build/
+nbbuild/
+nbproject/
+dist/
+nbdist/
+build.xml
+nbactions.xml
+nb-configuration.xml
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+# OS
+.DS_Store
+
+# Misc
+*.swp
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag

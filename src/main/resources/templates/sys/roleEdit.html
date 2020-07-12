@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<title>角色新增和修改</title>
+<head th:include="include :: header"></head>
+<body>
+<div style="margin:auto">
+    <div class="panel-body">
+        <form id="roleForm">
+            <input id="roleId" name="id" type="hidden" th:value="${role?.id}">
+            <div class="form-group">
+                <label for="roleName" class="control-label">角色名称：</label>
+                <input id="roleName" name="roleName" class="form-control" type="text"
+                       autocomplete="new-password"
+                       maxlength="50"
+                       placeholder="角色名称"
+                       th:value="${role?.roleName}">
+            </div>
+            <div class="form-group">
+                <label for="roleDesc" class="control-label">角色描述：</label>
+                <textarea id="roleDesc" name="roleDesc" class="form-control" type="text"
+                          rows="4"
+                          maxlength="200"
+                          placeholder="角色描述">[[${role?.roleDesc}]]</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </form>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<!--角色js-->
+<script th:src="@{/js/sys/roleEdit.js(t=${#dates.createNow().getTime()})}"></script>
+</body>
+</html>

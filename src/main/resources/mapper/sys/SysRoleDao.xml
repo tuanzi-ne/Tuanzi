@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.sys.dao.SysRoleDao">
+    <!--查询所有角色信息-->
+    <select id="queryList" parameterType="map" resultType="SysRoleInfo">
+        select r.*
+        from sys_role r
+        <where>
+            <if test="roleName != null and roleName.trim() != ''">
+                r.`role_name` like concat('%',#{roleName},'%')
+            </if>
+            <if test="roleId != null">
+                and r.`id` = #{roleId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增角色-->
+    <insert id="save" parameterType="SysRoleInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_role
+        (
+        `id`,
+        `role_name`,
+        `role_desc`,
+        `create_time`,
+        `update_time`
+        )
+        values
+        (
+        #{id},
+        #{roleName},
+        #{roleDesc},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <!--根据roleId查询资源-->
+    <select id="getResByRId" parameterType="int" resultType="int">
+        select rr.res_id
+        from sys_role_res rr
+        where rr.role_id = #{roleId}
+    </select>
+
+    <!--保存角色修改-->
+    <update id="update" parameterType="SysRoleInfo">
+        update sys_role
+        <set>
+            <if test="roleName != null">`role_name` = #{roleName},</if>
+            <if test="roleDesc != null">`role_desc` = #{roleDesc},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--是否包含角色-->
+    <select id="hasRole" parameterType="map" resultType="int">
+        select count(1)
+        from sys_role r
+        where r.`role_name` = #{roleName}
+        <if test="roleId != null">
+            and r.`id` not in (#{roleId})
+        </if>
+    </select>
+
+    <!--删除角色-->
+    <delete id="delete">
+        delete from sys_role where id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+        ;
+        delete from sys_role_res where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+        ;
+        delete from sys_user_role where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <!--删除角色与资源关系-->
+    <delete id="delRoleRes" parameterType="Integer">
+        delete from sys_role_res where role_id = #{roleId}
+    </delete>
+
+    <!--保存角色与资源关系-->
+    <insert id="saveRoleRes" parameterType="map">
+        insert into sys_role_res
+        (
+        `role_id`,
+        `res_id`
+        )
+        values
+        <foreach collection="resIds" item="item" index="index" separator=",">
+            (
+            #{roleId},
+            #{item}
+            )
+        </foreach>
+    </insert>
+
+
+
+</mapper>

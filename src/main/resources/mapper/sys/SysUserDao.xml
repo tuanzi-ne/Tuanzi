@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.sys.dao.SysUserDao">
+    <!--查询所有用户信息-->
+    <select id="queryList" parameterType="map" resultType="SysUserInfo">
+        select u.*,
+        (select d.dept_name from sys_dept d where d.id = u.dept_id) deptName
+        from sys_user u
+        <where>
+            <if test="username != null and username.trim() != ''">
+                and u.`username` like concat('%',#{username},'%')
+            </if>
+            <if test="userId != null">
+                and u.`id` = #{userId}
+            </if>
+            <if test="status != null and status.trim() != ''">
+                and u.`status` = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!--根据userId批量查询所有用户信息-->
+    <select id="queryListBatch" resultType="SysUserInfo">
+        select u.*,
+        (select d.dept_name from sys_dept d where d.id = u.dept_id) deptName
+        from sys_user u
+        where id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+    <!--根据用户名查询用户信息-->
+    <select id="queryByUserName" parameterType="string" resultType="SysUserInfo">
+        select * from sys_user where username = #{username}
+    </select>
+
+    <!--新增用户-->
+    <insert id="save" parameterType="SysUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user
+        (
+        `id`,
+        `username`,
+        `password`,
+        `realname`,
+        `salt`,
+        `email`,
+        `phone`,
+        `status`,
+        `dept_id`,
+        `create_time`,
+        `update_time`
+        )
+        values
+        (
+        #{id},
+        #{username},
+        #{password},
+        #{realname},
+        #{salt},
+        #{email},
+        #{phone},
+        #{status},
+        #{deptId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <!--删除用户与角色关系-->
+    <delete id="delUserRole" parameterType="Integer">
+        delete from sys_user_role where user_id = #{userId}
+    </delete>
+
+    <!--保存用户与角色关系-->
+    <insert id="saveUserRole" parameterType="map">
+        insert into sys_user_role
+        (
+        `user_id`,
+        `role_id`
+        )
+        values
+        <foreach collection="roleIds" item="item" index="index" separator=",">
+            (
+            #{userId},
+            #{item}
+            )
+        </foreach>
+    </insert>
+
+    <!--根据用户ID查询用户角色-->
+    <select id="queryRolesByUId" parameterType="int" resultType="SysRoleInfo">
+        select r.*
+        from sys_role r
+        <where>
+            <if test="userId != null">
+                exists (
+                select ur.role_id
+                from sys_user_role ur
+                where ur.role_id = r.id
+                and ur.user_id = #{userId})
+            </if>
+        </where>
+    </select>
+
+    <!--根据用户ID查询用户所有权限-->
+    <select id="queryAllPerms" parameterType="int" resultType="string">
+        select r.res_perms
+        from sys_user_role ur
+        LEFT JOIN sys_role_res rr on ur.role_id = rr.role_id
+        LEFT JOIN sys_res r on rr.res_id = r.id
+        where ur.user_id = #{userId}
+    </select>
+
+    <!--保存用户修改-->
+    <update id="update" parameterType="SysRoleInfo">
+        update sys_user
+        <set>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="realname != null">`realname` = #{realname},</if>
+            <if test="email != null">`email` = #{email},</if>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--是否包含用户-->
+    <select id="isHasUser" parameterType="map" resultType="int">
+        select count(1)
+        from sys_user u
+        where u.`username` = #{username}
+        <if test="userId != null">
+            and u.`id` not in (#{userId})
+        </if>
+    </select>
+
+    <!--删除用户-->
+    <delete id="delete">
+        delete from sys_user where id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        ;
+        delete from sys_user_role where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <!--重置密码-->
+    <update id="resetPwd" parameterType="list">
+        <foreach collection="list" item="user" index="index" separator=";">
+            UPDATE sys_user
+            set password = #{user.password},
+            update_time = #{user.updateTime}
+            WHERE id = #{user.id}
+        </foreach>
+    </update>
+
+
+    <!--验证密码-->
+    <select id="hasPwd" parameterType="map" resultType="int">
+        select count(1)
+        from sys_user u
+        where u.`password`=#{password}
+        and u.`username`=#{username}
+    </select>
+
+    <!--更新密码-->
+    <update id="updatePwd" parameterType="map">
+        update sys_user
+        set `password` = #{password},
+        `update_time` = #{updateTime}
+        where id = #{userId}
+    </update>
+
+</mapper>

@@ -1,0 +1,63 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
+         updateCheck="false">
+    <!--
+    user.home：用户家目录。
+    user.dir：用户当前工作目录。
+    java.io.tmpdir：Java临时目录。
+    -->
+    <!--
+    updateCheck="false" 关闭更新检测
+    默认缓存配置
+    以下属性必须：
+    name: cache标识符,一个CacheManager中必须唯一。
+    maxElementsInMemory: 内存中缓存元素的最大数目。
+    maxElementsOnDisk: 磁盘中缓存元素的最大数目。
+    eternal: 缓存是否会过期,true表示缓存永久有效,false表示不为永久有效,如果为true则忽略timeToIdleSeconds和timeToLiveSeconds。
+    overflowToDisk: 内存中缓存已满时是否缓存到磁盘,如果为false则忽略。
+    以下属性可选：
+    timeToIdleSeconds: 缓存元素的最大闲置时间（秒）,这段时间内如果不访问该元素则缓存失效。
+    timeToLiveSeconds: 缓存元素的最大生存时间（秒）,超过这段时间则强制缓存失效。
+    diskPersistent: 是否缓存虚拟机重启期数据,Server重启时将缓存序列化到本地后再加载,保证缓存在重启后依然有效,默认是false。
+    diskExpiryThreadIntervalSeconds: 磁盘缓存的清理线程运行间隔,默认是120秒.
+    memoryStoreEvictionPolicy: 当maxElementsInMemory达到限制,有新的element加入的时候,
+    移除缓存中element的策略。默认是LRU,可选有FIFO（先进先出）或是LFU（较少使用）
+    cacheEventListenerFactory：注册相应的缓存监听类,用于处理缓存事件,如put,remove,update,和expire
+    bootstrapCacheLoaderFactory:指定BootstrapCacheLoader,用于初始化缓存,以及自动设置。
+    -->
+    <diskStore path="${java.io.tmpdir}/cache" />
+    <!-- 默认配置 -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            maxElementsOnDisk="0"
+            eternal="true"
+            timeToIdleSeconds="0"
+            timeToLiveSeconds="0"
+            overflowToDisk="false"
+            diskPersistent="false"
+            diskSpoolBufferSizeMB="50"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+    />
+    <!-- session cache -->
+    <cache name="shiro-session-cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           statistics="true"
+           diskPersistent="false">
+    </cache>
+    <!-- 参数管理 cache -->
+    <cache name="paramlist"
+           maxElementsInMemory="1000"
+           eternal="false"
+           overflowToDisk="false"
+           timeToLiveSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"
+           diskPersistent="false">
+<!--
+        <BootstrapCacheLoaderFactory class="net.sf.ehcache.store.DiskStoreBootstrapCacheLoaderFactory" properties="bootstrapAsynchronously=true" />
+-->
+    </cache>
+</ehcache>

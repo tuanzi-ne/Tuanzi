@@ -1,0 +1,96 @@
+/*!
+ * login based Bootstrap v1.0.0
+ * Copyright 2018
+ * author 团子
+ * Licensed under MIT
+ */
+body {
+    padding-top: 70px;
+    height: auto;
+    background: url("../img/bg001.jpg") no-repeat fixed center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+
+nav img {
+    width: 30px;
+    height: 28px;
+}
+
+.navbar-brand > img {
+    display: inline;
+}
+
+.navbar-head {
+    border-left: solid 1px #fff;
+    padding-left: 10px;
+}
+
+.signin {
+    margin-top: 38px;
+    color: rgba(255, 255, 255, .95);
+}
+
+.signin ul {
+    padding: 0;
+    font-size: 20px;
+    list-style: none;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    border-top: solid 1px rgba(255, 255, 255, .8);
+}
+
+.form-signin {
+    max-width: 340px;
+    padding: 15px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, .3);
+    -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+    -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+    box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.form-signin input {
+    cursor: auto;
+}
+
+.form-signin .glyphicon {
+    color: #000
+}
+
+.form-inline,.form-submit {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.kaptcha {
+    width: 105px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.msgdiv {
+    margin-bottom: 10px;
+    display: block;
+}
+
+
+label.error {
+    color:#a94442;
+    margin-bottom: 0;
+}
+
+label.hide {
+    display:none;
+}

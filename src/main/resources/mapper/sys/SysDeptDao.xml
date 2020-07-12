@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.sys.dao.SysDeptDao">
+    <!--查询所有部门信息-->
+    <select id="queryList" parameterType="map" resultType="SysDeptInfo">
+        select d.*,
+        ifnull((select p.dept_name from sys_dept p where p.id = d.parent_id),"顶级部门") as parentName
+        from sys_dept d
+        <where>
+            <if test="deptName != null and deptName.trim() != ''">
+                and d.`dept_name` like concat('%',#{deptName},'%')
+            </if>
+            <if test="deptId != null">
+                and d.`id` = #{deptId}
+            </if>
+            <if test="parentId != null">
+                and d.`parent_id` = #{parentId}
+            </if>
+        </where>
+        <if test="orderBy != null and orderBy.trim() != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!--根据deptId批量查询所有部门信息-->
+    <select id="queryListBatch" resultType="SysDeptInfo">
+        select d.*
+        from sys_dept d
+        where id in
+        <foreach item="deptId" collection="array" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+
+    <!--新增部门-->
+    <insert id="save" parameterType="SysDeptInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_dept
+        (
+        `id`,
+        `dept_name`,
+        `dept_desc`,
+        `parent_Id`,
+        `order_no`,
+        `create_time`,
+        `update_time`
+        )
+        values
+        (
+        #{id},
+        #{deptName},
+        #{deptDesc},
+        #{parentId},
+        #{orderNo},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <!--保存部门修改-->
+    <update id="update" parameterType="SysRoleInfo">
+        update sys_dept
+        <set>
+            <if test="deptName != null">`dept_name` = #{deptName},</if>
+            <if test="deptDesc != null">`dept_desc` = #{deptDesc},</if>
+            <if test="parentId != null">`parent_Id` = #{parentId},</if>
+            <if test="orderNo != null">`order_no` = #{orderNo},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--是否包含部门-->
+    <select id="hasDept" parameterType="map" resultType="int">
+        select count(1)
+        from sys_dept d
+        where d.`dept_name` = #{deptName}
+        <if test="deptId != null">
+            and d.`id` not in (#{deptId})
+        </if>
+    </select>
+
+    <!--删除部门-->
+    <delete id="delete">
+        delete from sys_dept where id in
+        <foreach item="deptId" collection="array" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </delete>
+</mapper>

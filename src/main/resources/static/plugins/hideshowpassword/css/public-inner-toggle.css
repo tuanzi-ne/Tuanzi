@@ -1,0 +1,52 @@
+#user_pass {
+	display: inline-block; /* Make Firefox behave nicely */
+}
+
+.hideShowPassword-toggle {
+	background: transparent;
+	border: none;
+	color: transparent;
+	cursor: pointer;
+	font: 0/0 a;
+	text-shadow: none;
+	width: 40px;
+	height: 40px;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+}
+
+.hideShowPassword-toggle:before {
+	color: #2ea2cc;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 16px;
+	font-family: 'dashicons';
+	font-weight: normal;
+	font-style: normal;
+	line-height: 40px;
+	text-align: center;
+	width: 40px;
+	-webkit-font-smoothing: antialiased;
+}
+
+.hideShowPassword-toggle:hover, .hideShowPassword-toggle:focus {
+	outline: transparent;
+}
+
+.hideShowPassword-toggle:hover:before, .hideShowPassword-toggle:focus:before {
+	color: #1e8cbe;
+	color: #0074A2;
+}
+
+.hideShowPassword-toggle-show:before {
+	content: '\f177';
+}
+
+.hideShowPassword-toggle-hide:before {
+	content: '\f530';
+}
+
+::-ms-reveal,
+::-ms-clear {
+	display: none !important;
+}

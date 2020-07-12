@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<link rel="shortcut icon" th:href="@{/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css(v=3.3.6)}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css(v=4.7.0)}" rel="stylesheet">
+    <link th:href="@{/plugins/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link th:href="@{/plugins/bootstrap-table/extensions/reorder-columns/dragtable.css}" rel="stylesheet">
+    <link th:href="@{/plugins/jqtreegrid/jquery.treegrid.css}" rel="stylesheet">
+    <link th:href="@{/plugins/zTree/css/metroStyle/metroStyle.css}" rel="stylesheet">
+    <link th:href="@{/plugins/iCheck/skins/square/green.css(v=1.0.2)}" rel="stylesheet">
+    <link th:href="@{/plugins/toastr/toastr.min.css}" rel="stylesheet">
+    <!--日期控件-->
+    <link th:href="@{/plugins/datepicker/css/bootstrap-datepicker3.standalone.min.css(v=1.8.0)}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <!--自定义CSS-->
+    <style type="text/css">
+        label.error {
+            color:#a94442;
+            margin-bottom: 0px;
+        }
+        form .form-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<div th:fragment="footer">
+	<script th:src="@{/js/jquery-1.12.4.min.js(v=1.12.4)}"></script>
+	<script th:src="@{/js/jquery.serializejson.min.js(v=2.3.1)}"></script>
+	<script th:src="@{/js/bootstrap.min.js(v=3.3.6)}"></script>
+	<!-- bootstrap table -->
+	<script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js(v=1.12.1)}"></script>
+	<script th:src="@{/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js(v=1.12.1)}"></script>
+	<!--列调序-->
+	<script th:src="@{/plugins/bootstrap-table/extensions/reorder-columns/bootstrap-table-reorder-columns.js}"></script>
+	<script th:src="@{/js/jquery-ui.min.js(v=1.12.1)}"></script>
+	<script th:src="@{/plugins/bootstrap-table/extensions/reorder-columns/jquery.dragtable.js}"></script>
+	<!--导出-->
+	<script th:src="@{/plugins/bootstrap-table/extensions/export/bootstrap-table-export.min.js}"></script>
+	<script th:src="@{/plugins/bootstrap-table/extensions/export/tableExport.js}"></script>
+	<!--树形表格-->
+	<script th:src="@{/plugins/jqtreegrid/jquery.treegrid.min.js}"></script>
+	<script th:src="@{/plugins/jqtreegrid/jquery.treegrid.extension.js}"></script>
+	<!--[if lt IE 9]>
+	<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js?v=3.7.3"></script>
+	<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js?v=1.4.2"></script>
+	<![endif]-->
+	<!-- layer弹窗 -->
+	<script th:src="@{/plugins/layer/layer.js(v=3.1.1)}"></script>
+	<!--第三方插件-->
+	<!--zTree js-->
+	<script th:src="@{/plugins/zTree/jquery.ztree.all.min.js(v=3.5.34)}"></script>
+	<!-- iCheck -->
+	<script th:src="@{/plugins/iCheck/icheck.min.js(v=1.0.2)}"></script>
+    <!--日期控件-->
+    <script th:src="@{/plugins/datepicker/js/bootstrap-datepicker.min.js(v=1.8.0)}"></script>
+    <script th:src="@{/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.min.js(v=1.8.0)}"></script>
+	<!--消息框-->
+	<script th:src="@{/plugins/toastr/toastr.min.js}"></script>
+	<script type="text/javascript">
+        /*icheck设置*/
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+        /*错误提示框设置*/
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "positionClass": "toast-top-right",
+            "showDuration": "500", //显示动画时间
+            "hideDuration": "500", //隐藏动画时间
+            "timeOut": "5000", //自动关闭超时时间
+            "extendedTimeOut": "2000", //加长超时时间
+            "showEasing": "swing", //显示动画缓冲方式
+            "hideEasing": "swing", //隐藏动画缓冲方式
+            "showMethod": "fadeIn", //显示动画方式
+            "hideMethod": "fadeOut" //隐藏动画方式
+        };
+	</script>
+	<script th:src="@{/plugins/validate/jquery.validate.min.js(v=1.13.0)}"></script>
+	<script th:src="@{/plugins/validate/messages_zh.min.js(v=1.13.0)}"></script>
+	<!--自定义js-->
+	<script th:src="@{/js/jquery.extend.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = /*[[@{/}]]*/ '';
+        /*]]>*/
+	</script>
+</div>

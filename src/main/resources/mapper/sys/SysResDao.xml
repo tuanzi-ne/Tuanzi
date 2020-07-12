@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.sys.dao.SysResDao">
+    <!--查询所有资源信息-->
+    <select id="queryList" parameterType="map" resultType="SysResInfo">
+        select r.*,
+        ifnull((select p.res_name from sys_res p where p.id = r.parent_id),'顶级资源') as parentName
+        from sys_res r
+        <where>
+            <if test="resName != null and resName.trim() != ''">
+                and r.`res_name` like concat('%',#{resName},'%')
+            </if>
+            <if test="resId != null">
+                and r.`id` = #{resId}
+            </if>
+            <if test="parentId != null">
+                and r.`parent_id` = #{parentId}
+            </if>
+            <if test="resTypeArray!=null and resTypeArray.length!=0">
+                AND r.`res_type` in
+                <foreach collection="resTypeArray" item="resType"
+                         index="index" open="(" close=")" separator=",">
+                    #{resType}
+                </foreach>
+            </if>
+        </where>
+        <if test="orderBy != null and orderBy.trim() != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!--根据resId批量查询所有资源信息-->
+    <select id="queryListBatch" resultType="SysResInfo">
+        select r.*
+        from sys_res r
+        where id in
+        <foreach item="resId" collection="array" open="(" separator="," close=")">
+            #{resId}
+        </foreach>
+    </select>
+
+    <!--新增资源-->
+    <insert id="save" parameterType="SysResInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_res
+        (
+        `id`,
+        `res_name`,
+        `res_desc`,
+        `res_icon`,
+        `res_type`,
+        `res_url`,
+        `res_perms`,
+        `parent_Id`,
+        `order_no`,
+        `create_time`,
+        `update_time`
+        )
+        values
+        (
+        #{id},
+        #{resName},
+        #{resDesc},
+        #{resIcon},
+        #{resType},
+        #{resUrl},
+        #{resPerms},
+        #{parentId},
+        #{orderNo},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <!--保存资源修改-->
+    <update id="update" parameterType="SysRoleInfo">
+        update sys_res
+        <set>
+            <if test="resName != null">`res_name` = #{resName},</if>
+            <if test="resDesc != null">`res_desc` = #{resDesc},</if>
+            <if test="resIcon != null">`res_icon` = #{resIcon},</if>
+            <if test="resType != null">`res_type` = #{resType},</if>
+            <if test="resUrl != null">`res_url` = #{resUrl},</if>
+            <if test="resPerms != null">`res_perms` = #{resPerms},</if>
+            <if test="parentId != null">`parent_Id` = #{parentId},</if>
+            <if test="orderNo != null">`order_no` = #{orderNo},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--是否包含资源-->
+    <select id="hasRes" parameterType="map" resultType="int">
+        select count(1)
+        from sys_res r
+        where r.`res_name` = #{resName}
+        <if test="resId != null">
+            AND r.`id` not in (#{resId})
+        </if>
+        <if test="resTypeArray!=null and resTypeArray.length!=0">
+            AND r.`res_type` in
+            <foreach collection="resTypeArray" item="resType"
+                     index="index" open="(" close=")" separator=",">
+                #{resType}
+            </foreach>
+        </if>
+    </select>
+
+    <!--删除资源-->
+    <delete id="delete">
+        delete from sys_res where id in
+        <foreach item="resId" collection="array" open="(" separator="," close=")">
+            #{resId}
+        </foreach>
+    </delete>
+
+    <!--根据用户ID查资源ID-->
+    <select id="getResIdByUId" parameterType="int" resultType="int">
+        select rr.res_id from sys_user_role ur
+        LEFT JOIN sys_role_res rr on ur.role_id = rr.role_id
+        <where>
+            <if test="userId != null">
+                and ur.`user_Id` = ${userId}
+            </if>
+        </where>
+        group by rr.res_id
+    </select>
+    <!--根据上级资源ID查所有子资源-->
+    <select id="getResByPId" parameterType="int" resultType="SysResInfo">
+        select * from sys_res where parent_id = #{parentId} order by order_no asc
+    </select>
+</mapper>
