@@ -10,6 +10,38 @@
     <link th:href="@{/css/bootstrap.min.css(v=3.3.6)}" rel="stylesheet">
     <link th:href="@{/css/font-awesome.min.css(v=4.7.0)}" rel="stylesheet">
     <link th:href="@{/css/login.css}" rel="stylesheet">
+    <style>
+        .vaptcha-init-main {
+            display: table;
+            width: 100%;
+            height: 100%;
+            background-color: #EEEEEE;
+        }
+
+        .vaptcha-init-loading {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center
+        }
+
+        .vaptcha-init-loading > a {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: none;
+        }
+
+        .vaptcha-init-loading > a image {
+            vertical-align: middle
+        }
+
+        .vaptcha-init-loading .vaptcha-text {
+            font-family: sans-serif;
+            font-size: 12px;
+            color: #CCCCCC;
+            vertical-align: middle
+        }
+    </style>
 </head>
 <body style="overflow:hidden;">
 <!-- nav -->
@@ -62,13 +94,13 @@
                        maxlength="100">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
-            <div class="form-inline">
-                <input type="text" name="captcha" id="captcha"
-                       class="form-control"
-                       placeholder="输入验证码" maxlength="4" onkeydown="onKeyDown()">
-                <img th:src="@{/captcha(t=${#dates.createNow()})}" alt="验证码图片" class="kaptcha" id="kaptcha"
-                     onclick="changeCaptcha()" title="看不清换一张?">
-            </div>
+<!--            <div class="form-inline">-->
+<!--                <input type="text" name="captcha" id="captcha"-->
+<!--                       class="form-control"-->
+<!--                       placeholder="输入验证码" maxlength="4" onkeydown="onKeyDown()">-->
+<!--                <img th:src="@{/captcha(t=${#dates.createNow()})}" alt="验证码图片" class="kaptcha" id="kaptcha"-->
+<!--                     onclick="changeCaptcha()" title="看不清换一张?">-->
+<!--            </div>-->
             <div class="form-submit">
                 <input type="submit" id="btnLogin"
                        class="btn btn-success btn-block"
@@ -85,6 +117,9 @@
         SpringBootAdmin管理平台 &copy;[[${#dates.year(#dates.createNow())}]]
     </div>
 </footer>
+
+<script src="https://v.vaptcha.com/v3.js"></script>
+<script src="https:r.vaptcha.com/public/js/jquery-3.2.1.min.js"></script>
 <!--全局js-->
 <script th:src="@{/js/jquery-1.12.4.min.js(v=1.12.4)}"></script>
 <script th:src="@{/js/bootstrap.min.js(v=3.3.6)}"></script>
@@ -102,6 +137,8 @@
 <!--自定义js-->
 <script th:src="@{/js/login.js}"></script>
 <script th:src="@{/js/jquery.extend.js}"></script>
+
+
 
 </body>
 </html>

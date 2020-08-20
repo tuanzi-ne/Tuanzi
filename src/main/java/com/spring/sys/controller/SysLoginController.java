@@ -6,6 +6,10 @@ import com.spring.common.annotation.SysLog;
 import com.spring.common.mvc.BaseController;
 import com.spring.common.shiro.ShiroUtils;
 import com.spring.common.utils.Result;
+import com.spring.common.vaptcha.constant.Constant;
+import com.spring.common.vaptcha.domain.HttpResp;
+import com.spring.common.vaptcha.domain.SecondVerify;
+import com.spring.common.vaptcha.sdk.Vaptcha;
 import com.spring.sys.pojo.SysResInfo;
 import com.spring.sys.service.SysResService;
 import com.spring.sys.service.SysUserService;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -39,6 +44,8 @@ public class SysLoginController extends BaseController{
     SysResService sysResService;
     @Autowired
     SysUserService sysUserService;
+
+    private Vaptcha vaptcha = Vaptcha.getInstance(Constant.SecretKey, Constant.Vid, Constant.Scene);
 
     @GetMapping("/captcha")
     public void captcha(HttpServletResponse response) throws IOException {
@@ -73,26 +80,40 @@ public class SysLoginController extends BaseController{
     @SysLog("登录系统")
     @PostMapping("/login")
     @ResponseBody
-    public Result login(String username, String password, String captcha) {
-        String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-        if (!captcha.equalsIgnoreCase(kaptcha)) {
-            return Result.error("验证码错误!");
-        }
-        try {
-            Subject subject = ShiroUtils.getSubject();
-            if (!subject.isAuthenticated()) {
-                subject.login(new UsernamePasswordToken(username, password));
+    public Result login(@RequestBody com.spring.common.vaptcha.domain.Verify verify, HttpServletRequest request) {
+//        String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+//        if (!captcha.equalsIgnoreCase(kaptcha)) {
+//            return Result.error("验证码错误!");
+//        }
+
+        String token = verify.getToken();
+        SecondVerify result = vaptcha.Verify(request, token);
+        if (result.getSuccess() == Constant.VerifySuccess) {
+            // 二次验证成功
+            // 执行后续逻辑 比如:登录 注册
+            try {
+                Subject subject = ShiroUtils.getSubject();
+                if (!subject.isAuthenticated()) {
+                    subject.login(new UsernamePasswordToken(verify.getUsername(), verify.getPassword()));
+                }
+            } catch (UnknownAccountException e) {
+                return Result.error("账号不存在!");
+            } catch (IncorrectCredentialsException e) {
+                return Result.error("密码错误!");
+            } catch (LockedAccountException e) {
+                return Result.error("账号被锁定,请联系管理员!");
+            } catch (AuthenticationException e) {
+                return Result.error("账户验证失败!");
             }
-        } catch (UnknownAccountException e) {
-            return Result.error("账号不存在!");
-        } catch (IncorrectCredentialsException e) {
-            return Result.error("密码错误!");
-        } catch (LockedAccountException e) {
-            return Result.error("账号被锁定,请联系管理员!");
-        } catch (AuthenticationException e) {
-            return Result.error("账户验证失败!");
+            return Result.build();
+
+        } else {
+            // 二次验证失败
+            // 前端重新人机验证
+            return Result.error("验证失败");
         }
-        return Result.build();
+
+
     }
 
     /**
