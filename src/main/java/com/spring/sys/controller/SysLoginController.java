@@ -7,7 +7,6 @@ import com.spring.common.mvc.BaseController;
 import com.spring.common.shiro.ShiroUtils;
 import com.spring.common.utils.Result;
 import com.spring.common.vaptcha.constant.Constant;
-import com.spring.common.vaptcha.domain.HttpResp;
 import com.spring.common.vaptcha.domain.SecondVerify;
 import com.spring.common.vaptcha.sdk.Vaptcha;
 import com.spring.sys.pojo.SysResInfo;

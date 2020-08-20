@@ -196,6 +196,8 @@ public class ShiroConfig {
         shiroFilter.setUnauthorizedUrl("/error/403");
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/login", "anon");
+        filterMap.put("/offline","anon");
+        filterMap.put("https://offline.vaptcha.com/","anon");
         filterMap.put("/css/**", "anon");
         filterMap.put("/fonts/**", "anon");
         filterMap.put("/img/**", "anon");

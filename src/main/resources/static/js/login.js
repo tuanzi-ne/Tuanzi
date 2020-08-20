@@ -87,7 +87,7 @@ function validateForm() {
         type: 'invisible', // 必填 显示类型 隐藏式
         scene: 1,// 场景值 默认0
         offline_server: 'http://localhost:8080/offline', //离线模式服务端地址 必填
-        // mode: 'offline', // 加入此参数直接进入离线模式，用于调试，上线请删除
+        //mode: 'offline', // 加入此参数直接进入离线模式，用于调试，上线请删除
         //可选参数
         //lang: 'zh-CN', // 语言 默认zh-CN,可选值zh-CN,en,zh-TW
         //https: false, // 使用https 默认false
@@ -189,3 +189,19 @@ function onKeyDown() {
         validateForm();
     }
 }
+
+
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+
+signUpButton.addEventListener('click', () => {
+    container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+    container.classList.remove("right-panel-active");
+});
+
+
+
