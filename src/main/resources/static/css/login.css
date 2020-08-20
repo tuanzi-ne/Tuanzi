@@ -82,8 +82,18 @@ a {
     color: #333;
     font-size: 14px;
     /* 	text-decoration: none; */
-    margin: 15px 0;
+    /*margin: 15px 0;*/
 }
+
+/*
+
+这么写  id为container 下面的 a 样式
+#container a {
+
+}
+
+
+*/
 
 button {
     border-radius: 20px;
