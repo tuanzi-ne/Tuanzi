@@ -9,14 +9,15 @@
     <link rel="shortcut icon" th:href="@{/favicon.ico}">
     <link th:href="@{/css/bootstrap.min.css(v=3.3.6)}" rel="stylesheet">
     <link th:href="@{/css/font-awesome.min.css(v=4.7.0)}" rel="stylesheet">
+    <link th:href="@{/plugins/toastr/toastr.min.css}" rel="stylesheet">
     <link th:href="@{/css/login.css}" rel="stylesheet">
 
 </head>
 <body>
 <div class="container" id="container">
     <div class="form-container sign-up-container">
-        <form action="#">
-            <div>&nbsp;</div>
+        <form id="re-form-signin" method="post" action="">
+            <div id="re-msg">&nbsp;</div>
             <h1>注册</h1>
 <!--            <div class="social-container">-->
 <!--                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>-->
@@ -25,10 +26,28 @@
 <!--            </div>-->
 <!--            <span>第三方账号注册</span>-->
             <div>&nbsp;</div>
-            <input type="text" placeholder="名称" />
-            <input type="email" placeholder="邮箱" />
-            <input type="password" placeholder="密码" />
-            <button>注册</button>
+            <div style=" width: 100%;">
+                <input type="text" autocomplete="new-password" id="uname" maxlength="50"    name="uname" placeholder="账号" />
+                <span></span>
+            </div>
+
+            <div style=" width: 100%;">
+                <input type="password" autocomplete="new-password" maxlength="100" id="npwd" name="npwd"   placeholder="密码" />
+                <span></span>
+            </div>
+
+            <div style=" width: 100%;">
+                <input type="password" autocomplete="new-password" maxlength="100" id="opwd"  name="opwd" placeholder="确认密码" />
+                <span></span>
+            </div>
+
+            <button type="submit"
+                   class="badge-primary"
+                   autocomplete="off"
+                   id="btnRegistered"
+                   data-loading-text="正在注册..."
+            >注册
+            </button>
         </form>
     </div>
     <div class="form-container sign-in-container">
@@ -67,7 +86,6 @@
 <!--            <a href="#">忘记密码？</a>-->
             <div style=" width: 100%;">
                 <button type="submit" id="btnLogin"
-                        autocomplete="off"
                         data-loading-text="正在登录...">登录</button>
             </div>
 
@@ -110,9 +128,12 @@
 <!--第三方插件-->
 <script th:src="@{/plugins/validate/jquery.validate.min.js}"></script>
 <script th:src="@{/plugins/validate/messages_zh.min.js}"></script>
+<script th:src="@{/plugins/toastr/toastr.min.js}"></script>
+
 
 <!--自定义js-->
 <script th:src="@{/js/login.js}"></script>
+<script th:src="@{/js/registered.js}"></script>
 <script th:src="@{/js/jquery.extend.js}"></script>
 
 </body>

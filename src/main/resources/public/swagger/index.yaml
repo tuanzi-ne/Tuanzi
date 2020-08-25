@@ -2,9 +2,9 @@ swagger: '2.0'
 info:
   description: JAVA后台管理系统，企业开发首选脚手架。
   version: 1.0.0
-  title: SpringBootAdmin
+  title: Tuanzi
 
-basePath: /SpringBootAdmin
+basePath: /Tuanzi
 
 schemes:
   - http

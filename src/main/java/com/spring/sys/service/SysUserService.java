@@ -67,4 +67,6 @@ public interface SysUserService {
      * 根据参数key得到参数value,不存在返回默认值
      */
     String getParamValueByKey(String key, String defaultValue);
+
+    SysUserInfo registered(SysUserInfo user) throws Exception;
 }

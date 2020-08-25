@@ -10,6 +10,7 @@ import com.spring.common.vaptcha.constant.Constant;
 import com.spring.common.vaptcha.domain.SecondVerify;
 import com.spring.common.vaptcha.sdk.Vaptcha;
 import com.spring.sys.pojo.SysResInfo;
+import com.spring.sys.pojo.SysUserInfo;
 import com.spring.sys.service.SysResService;
 import com.spring.sys.service.SysUserService;
 import org.apache.shiro.authc.*;
@@ -149,4 +150,25 @@ public class SysLoginController extends BaseController{
     public String main() {
         return "main";
     }
+
+
+    @SysLog("注册系统")
+    @PostMapping("/registered")
+    @ResponseBody
+    public Result registered(@RequestBody SysUserInfo user) {
+
+        SysUserInfo userInfo = null;
+        try {
+            userInfo = sysUserService.registered(user);
+            return Result.data("注册成功",userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return Result.error(e.getMessage());
+        }
+
+
+    }
+
+
 }

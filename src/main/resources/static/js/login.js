@@ -5,14 +5,17 @@ if (top !== self) {
     top.location.href = self.location.href;
 }
 
+
+
 $(function () {
+
     validateForm();
 
     /*
      * 初始化按钮loading功能
      * n秒后恢复原状
      */
-    $("input[data-loading-text]").click(function () {
+    $("button[data-loading-text]").click(function () {
         var btn = $(this).button('loading');
         setTimeout(function () {
             btn.button('reset');
@@ -83,7 +86,7 @@ function validateForm() {
 
 
     vaptcha({
-        vid: '5e7b1276bdd837290c9e440e', // 必填
+        vid: '验证单元id', // 必填
         type: 'invisible', // 必填 显示类型 隐藏式
         scene: 1,// 场景值 默认0
         offline_server: 'http://localhost:8080/offline', //离线模式服务端地址 必填
@@ -95,27 +98,29 @@ function validateForm() {
         //color: '#57ABFF' //按钮颜色 默认值#57ABFF
     }).then(function (vaptchaObj) {
         obj = vaptchaObj;//将VAPTCHA验证实例保存到局部变量中
-
         //获取token的方式一:
         //vaptchaObj.renderTokenInput('.login-form')//以form的方式提交数据时，使用此函数向表单添加token值
 
         //获取token的方式二:
         vaptchaObj.listen('pass', function () {
+
+            var token = vaptchaObj.getToken();
+
             // 验证成功进行后续操作
-            var data = {
+            var loginData = {
                 //表单数据
-                token: vaptchaObj.getToken(),
+                token: token,
                 username: $("#username").val(),
-                password: $("#password").val()
+                password: $("#password").val(),
+                mark:0
             };
 
-            console.log(data);
             $.ajax({
                 type: 'POST',
                 url: "login?t=" + $.now(),
                 dataType: "json",
                 contentType: "application/json;charset=UTF-8",
-                data: JSON.stringify(data),
+                data: JSON.stringify(loginData),
                 success: function (r) {
                     console.log(r);
                     // 防浏览器保存密码

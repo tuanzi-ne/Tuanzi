@@ -206,4 +206,35 @@ public class SysUserServiceImpl extends AbstractLogging implements SysUserServic
         String value = getAllParams().get(key);
         return value == null || value.isEmpty() ? defaultValue : value.trim();
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, value = "transactionManager")
+    public SysUserInfo registered(SysUserInfo user) throws Exception {
+
+
+        SysUserInfo userInfo = sysUserDao.queryByUserName(user.getUsername());
+
+        if (userInfo != null){
+
+            throw new Exception("用户名已存在");
+        }
+
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
+        String salt = RandomStringUtils.randomAlphanumeric(20);
+        //sha256加密
+        user.setPassword(ShiroUtils.sha256(user.getPassword(), salt));
+        user.setSalt(salt);
+        sysUserDao.save(user);
+
+        List<Integer> roleIds = new ArrayList<>();
+
+        roleIds.add(2);
+
+        user.setRoleIds(roleIds);
+        //保存用户角色关系
+        saveOrUpdate(user.getId(), user.getRoleIds());
+
+        return user;
+    }
 }
