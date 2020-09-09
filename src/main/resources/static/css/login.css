@@ -47,7 +47,7 @@ label.error {
 }
 
 body {
-    background: #f6f5f7;
+    /*background: #f6f5f7;*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,6 +55,10 @@ body {
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
     margin: -20px 0 50px;
+
+    background-color: #f0f2f5;
+    animation: animate-cloud 20s linear infinite;
+    background: url("../img/cloud.jpg") 0 bottom repeat-x #049ec4;
 }
 
 h1 {
